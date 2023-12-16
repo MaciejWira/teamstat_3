@@ -59,7 +59,7 @@ export const getDataFetch = async <TResult, TVariables>({
   //   return json.data;
   // }
 
-  const response = await fetch(`${wpgqlPath}/`, {
+  const response = await fetch(wpgqlPath, {
     method: "POST",
     body: JSON.stringify({
       query: print(document),
