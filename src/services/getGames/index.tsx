@@ -1,9 +1,20 @@
 import { getDataFetch } from "@/services/getDataFetch";
 import { document } from "./helpers";
 
-const getGames = async () => {
+export type GameProps = {
+  date?: {
+    year: number;
+    month?: number;
+  };
+};
+
+const getGames = async ({ date }: GameProps = {}) => {
   const data = await getDataFetch({
     document,
+    variables: {
+      year: date?.year,
+      month: date?.month,
+    },
   });
   if (!data.games) return;
   if (!data.games.nodes) return;

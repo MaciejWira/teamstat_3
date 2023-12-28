@@ -1,8 +1,8 @@
 import { graphql } from "@/gql";
 
 export const document = graphql(`
-  query GetGames {
-    games(first: 100) {
+  query GetGames($month: Int, $year: Int) {
+    games(first: 100, where: { dateQuery: { month: $month, year: $year } }) {
       nodes {
         acf {
           gameBlowOut
@@ -30,6 +30,11 @@ export const document = graphql(`
         title
       }
     }
+  }
+
+  fragment PlayerFragment on Player {
+    databaseId
+    title
   }
 `);
 

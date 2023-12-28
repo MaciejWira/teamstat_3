@@ -1,0 +1,53 @@
+.Container {
+  max-width: 100%;
+  overflow: scroll;
+  font-size: 11px;
+  color: rgb(170, 170, 170);
+}
+
+.Td {
+  border: none;
+  border-bottom: 1px solid #222;
+  text-align: center;
+
+  padding: 7px 10px;
+
+  &--left {
+    text-align: left;
+  }
+
+  &--white {
+    color: white;
+  }
+
+  &--first {
+    border-bottom: 1px solid gold;
+  }
+
+  &--second {
+    border-bottom: 1px solid silver;
+  }
+
+  &--third {
+    border-bottom: 1px solid brown;
+  }
+
+  &:nth-child(n + 9) {
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
+}
+
+.Th {
+  font-weight: 600;
+}
+
+.Legend {
+  padding-top: 15px;
+  margin-bottom: 15px;
+}
+
+.Text {
+  margin-bottom: 7px;
+}

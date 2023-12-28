@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import "@/styles/globals.scss";
+import Container from "@/components/server/Container";
 
 export const metadata: Metadata = {
   title: "Teamstat",
@@ -15,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <main>
+          <Container>{children}</Container>
+        </main>
+      </body>
     </html>
   );
 }

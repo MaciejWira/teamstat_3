@@ -1,6 +1,6 @@
-import getGames from "@/services/getGames";
+import getGames, { GameProps } from "@/services/getGames";
 
-type PlayerStats = {
+export type PlayerStats = {
   id: number;
   title: string;
   games: number;
@@ -13,8 +13,8 @@ type PlayerStats = {
   points: number;
 };
 
-const getTable = async () => {
-  const games = await getGames();
+const getTable = async ({ date }: GameProps = {}) => {
+  const games = await getGames({ date });
   if (!games) return [];
 
   const playersWithStats = games.reduce((prev, curr) => {
