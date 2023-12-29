@@ -9,8 +9,6 @@
 
 .Select,
 .Link {
-  background-color: black;
-  color: white;
-  font-size: 11px;
+  @include text-table;
   margin-right: 8px;
 }

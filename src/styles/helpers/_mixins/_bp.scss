@@ -1,0 +1,23 @@
+@mixin bp($bp) {
+  @if $bp == sm {
+    @media (min-width: $sm) {
+      @content;
+    }
+  } @else if $bp == md {
+    @media (min-width: $md) {
+      @content;
+    }
+  } @else if $bp == lg {
+    @media (min-width: $md) {
+      @content;
+    }
+  } @else if $bp == xl {
+    @media (min-width: $xl) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $bp) {
+      @content;
+    }
+  }
+}

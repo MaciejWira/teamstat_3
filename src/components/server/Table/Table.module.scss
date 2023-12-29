@@ -1,8 +1,7 @@
 .Container {
   max-width: 100%;
-  overflow: scroll;
-  font-size: 11px;
-  color: rgb(170, 170, 170);
+  overflow: auto;
+  @include text-table(grey);
 }
 
 .Td {
@@ -33,8 +32,9 @@
   }
 
   &:nth-child(n + 9) {
-    @media (max-width: 600px) {
-      display: none;
+    display: none;
+    @include bp(sm) {
+      display: table-cell;
     }
   }
 }
