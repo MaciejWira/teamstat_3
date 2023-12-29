@@ -1,0 +1,25 @@
+@keyframes loader-round {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.Loader {
+  width: 30px;
+  height: 30px;
+  border-top: solid 4px white;
+  border-left: solid 4px white;
+  border-right: solid 4px white;
+  border-bottom: solid 4px transparent;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  animation-name: loader-round;
+  animation-duration: 700ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
