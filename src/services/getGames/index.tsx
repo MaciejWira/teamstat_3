@@ -15,6 +15,7 @@ const getGames = async ({ date }: GameProps = {}) => {
       year: date?.year,
       month: date?.month,
     },
+    tags: ["get-games"],
   });
   if (!data.games) return;
   if (!data.games.nodes) return;
