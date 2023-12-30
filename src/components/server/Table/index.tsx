@@ -14,7 +14,11 @@ const columns = [
     long: "Zawodnik",
     short: "Zawodnik",
     isLong: true,
-    additionalClasses: [styles["Td--left"], styles["Td--white"]],
+    additionalClasses: [
+      styles["Td--left"],
+      styles["Td--white"],
+      styles["Td--wide"],
+    ],
   },
   { long: "Mecze", short: "M" },
   { long: "Punkty", short: "Pkt" },

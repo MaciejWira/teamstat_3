@@ -19,6 +19,16 @@
     color: white;
   }
 
+  &--wide {
+    width: 80px;
+    min-width: 80px;
+
+    @include bp(sm) {
+      width: 100px;
+      min-width: 100px;
+    }
+  }
+
   &--first {
     border-bottom: 1px solid gold;
   }
