@@ -21,7 +21,7 @@ export default async function TablePage({
 
   return (
     <Table
-      heading={`Tabela za ${new Date(month).toLocaleString("default", {
+      heading={`Tabela za ${new Date(month).toLocaleString("pl-PL", {
         month: "long",
       })} ${year}`}
       table={table}

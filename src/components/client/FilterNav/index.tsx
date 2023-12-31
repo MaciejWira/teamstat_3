@@ -54,7 +54,7 @@ const FilterNav = () => {
         </option>
         {getMonths().map((month) => (
           <option key={month} value={month}>
-            {new Date(month).toLocaleString("default", {
+            {new Date(month).toLocaleString("pl-PL", {
               year: "numeric",
               month: "long",
             })}
