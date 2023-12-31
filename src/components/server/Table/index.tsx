@@ -5,6 +5,7 @@ import classNames from "@/services/classNames";
 import styles from "./Table.module.scss";
 
 type Props = {
+  heading?: string;
   table: PlayerStats[];
 };
 
@@ -30,9 +31,10 @@ const columns = [
   { long: "Gole stracone", short: "G-" },
 ];
 
-const Table: React.FC<Props> = ({ table }) => (
+const Table: React.FC<Props> = ({ heading, table }) => (
   <div className={styles.Container}>
     <FilterNav />
+    {heading && <h2>{heading}</h2>}
     <table>
       <tbody>
         <tr>

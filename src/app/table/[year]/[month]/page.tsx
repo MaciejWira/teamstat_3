@@ -19,5 +19,12 @@ export default async function TablePage({
     },
   });
 
-  return <Table table={table} />;
+  return (
+    <Table
+      heading={`Tabela za ${new Date(month).toLocaleString("default", {
+        month: "long",
+      })} ${year}`}
+      table={table}
+    />
+  );
 }

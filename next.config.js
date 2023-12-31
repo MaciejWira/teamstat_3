@@ -6,6 +6,15 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "src/styles")],
     prependData: `@import "helpers/_all.scss";`,
   },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: `/table/${new Date().getFullYear()}`,
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

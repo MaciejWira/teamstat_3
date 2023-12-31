@@ -17,5 +17,5 @@ export default async function TablePage({
     },
   });
 
-  return <Table table={table} />;
+  return <Table heading={`Tabela za rok ${year}`} table={table} />;
 }

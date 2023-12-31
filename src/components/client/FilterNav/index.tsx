@@ -75,7 +75,7 @@ const FilterNav = () => {
           </option>
         ))}
       </select>
-      <Link className={styles.Link} href="/">
+      <Link className={styles.Link} href="/table">
         Cała tabela
       </Link>
     </div>
