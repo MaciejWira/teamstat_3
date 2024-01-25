@@ -4,6 +4,14 @@
   @include text-table(grey);
 }
 
+.Header {
+  margin-bottom: 25px;
+}
+
+.Heading {
+  margin-bottom: 10px;
+}
+
 .Td {
   border: none;
   border-bottom: 1px solid #222;
@@ -60,4 +68,14 @@
 
 .Text {
   margin-bottom: 7px;
+}
+
+.Strong {
+  color: white;
+}
+
+.Break {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
 }

@@ -14,8 +14,12 @@ export type PlayerStats = {
 };
 
 const getTable = async ({ date }: GameProps = {}) => {
-  const games = await getGames({ date });
-  if (!games) return [];
+  const { games } = await getGames({ date });
+  if (!games)
+    return {
+      table: [],
+      rounds: 0,
+    };
 
   const playersWithStats = games.reduce((prev, curr) => {
     const updatedStats = [...prev];
@@ -113,7 +117,10 @@ const getTable = async ({ date }: GameProps = {}) => {
     return updatedStats;
   }, [] as PlayerStats[]);
 
-  return playersWithStats;
+  return {
+    table: playersWithStats,
+    rounds: games.length,
+  };
 };
 
 export const sortTable = (table: PlayerStats[]) => {

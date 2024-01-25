@@ -12,7 +12,7 @@ export default async function TablePage({
 }) {
   if (isNaN(+year) || isNaN(+month)) notFound();
 
-  const table = await getTable({
+  const { table, rounds } = await getTable({
     date: {
       year: +year,
       month: +month,
@@ -25,6 +25,7 @@ export default async function TablePage({
         month: "long",
       })} ${year}`}
       table={table}
+      rounds={rounds}
     />
   );
 }

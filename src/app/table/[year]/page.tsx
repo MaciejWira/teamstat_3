@@ -11,11 +11,13 @@ export default async function TablePage({
 }) {
   if (isNaN(+year)) notFound();
 
-  const table = await getTable({
+  const { table, rounds } = await getTable({
     date: {
       year: +year,
     },
   });
 
-  return <Table heading={`Tabela za rok ${year}`} table={table} />;
+  return (
+    <Table heading={`Tabela za rok ${year}`} table={table} rounds={rounds} />
+  );
 }

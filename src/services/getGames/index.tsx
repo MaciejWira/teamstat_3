@@ -17,9 +17,12 @@ const getGames = async ({ date }: GameProps = {}) => {
     },
     tags: ["get-games"],
   });
-  if (!data.games) return;
-  if (!data.games.nodes) return;
-  return data.games.nodes;
+  if (!data.games || !data.games.nodes) return {};
+
+  return {
+    games: data.games.nodes,
+    lastGameDate: data.games.nodes[0].acf?.gameDate,
+  };
 };
 
 export default getGames;

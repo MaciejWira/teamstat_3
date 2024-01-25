@@ -10,7 +10,9 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: `/table/${new Date().getFullYear()}`,
+        destination: `/table/${new Date().getFullYear()}/${
+          new Date().getMonth() + 1
+        }`,
         permanent: true,
       },
     ];

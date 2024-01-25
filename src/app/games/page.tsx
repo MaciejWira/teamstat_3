@@ -3,7 +3,7 @@ import getGames from "@/services/getGames";
 import style from "./GamesPage.module.scss";
 
 export default async function GamesPage() {
-  const games = await getGames();
+  const { games } = await getGames();
 
   return (
     <div className={style.Container}>

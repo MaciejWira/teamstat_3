@@ -2,7 +2,7 @@ import getTable from "@/services/getTable";
 import Table from "@/components/server/Table";
 
 export default async function Home() {
-  const table = await getTable();
+  const { table, rounds } = await getTable();
 
-  return <Table table={table} />;
+  return <Table table={table} rounds={rounds} />;
 }
