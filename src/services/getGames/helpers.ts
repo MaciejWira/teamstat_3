@@ -27,6 +27,7 @@ export const document = graphql(`
           }
         }
         databaseId
+        slug
         title
       }
     }
