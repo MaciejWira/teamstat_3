@@ -4203,14 +4203,14 @@ export type PageToRevisionConnectionWhereArgs = {
 /** The player type */
 export type Player = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithContentEditor & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & {
   __typename?: 'Player';
-  /** Added to the GraphQL Schema because the ACF Field Group &quot;CPT Game&quot; was set to Show in GraphQL. */
-  acf?: Maybe<Player_Acf>;
   /** The content of the post. */
   content?: Maybe<Scalars['String']['output']>;
   /** Connection between the ContentNode type and the ContentType type */
   contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
   /** The name of the Content Type the node belongs to */
   contentTypeName: Scalars['String']['output'];
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;CPT Players&quot; was set to Show in GraphQL. */
+  custom_fields?: Maybe<Player_CustomFields>;
   /** The unique identifier stored in the database */
   databaseId: Scalars['Int']['output'];
   /** Post publishing date. */
@@ -4352,43 +4352,12 @@ export type PlayerToPreviewConnectionEdge = Edge & OneToOneConnection & PlayerCo
 };
 
 /** Field Group */
-export type Player_Acf = AcfFieldGroup & {
-  __typename?: 'Player_Acf';
+export type Player_CustomFields = AcfFieldGroup & {
+  __typename?: 'Player_CustomFields';
+  excludeFromTables?: Maybe<Scalars['Boolean']['output']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
-  gameBlowOut?: Maybe<Scalars['Boolean']['output']>;
-  gameDate?: Maybe<Scalars['String']['output']>;
-  gameTeam1?: Maybe<Player_Acf_GameTeam1>;
-  gameTeam2?: Maybe<Player_Acf_GameTeam2>;
 };
-
-/** Field Group */
-export type Player_Acf_GameTeam1 = AcfFieldGroup & {
-  __typename?: 'Player_Acf_GameTeam1';
-  captain?: Maybe<Array<Maybe<Player_Acf_GameTeam1_Captain>>>;
-  /** The name of the ACF Field Group */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  goals?: Maybe<Scalars['Float']['output']>;
-  players?: Maybe<Array<Maybe<Player_Acf_GameTeam1_Players>>>;
-};
-
-export type Player_Acf_GameTeam1_Captain = Player;
-
-export type Player_Acf_GameTeam1_Players = Player;
-
-/** Field Group */
-export type Player_Acf_GameTeam2 = AcfFieldGroup & {
-  __typename?: 'Player_Acf_GameTeam2';
-  captain?: Maybe<Array<Maybe<Player_Acf_GameTeam2_Captain>>>;
-  /** The name of the ACF Field Group */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  goals?: Maybe<Scalars['Float']['output']>;
-  players?: Maybe<Array<Maybe<Player_Acf_GameTeam2_Players>>>;
-};
-
-export type Player_Acf_GameTeam2_Captain = Player;
-
-export type Player_Acf_GameTeam2_Players = Player;
 
 /** An plugin object */
 export type Plugin = Node & {
@@ -10125,5 +10094,11 @@ export type GetGamesQuery = { __typename?: 'RootQuery', games?: { __typename?: '
 
 export type PlayerFragmentFragment = { __typename?: 'Player', databaseId: number, title?: string | null };
 
+export type GetPlayersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPlayersQuery = { __typename?: 'RootQuery', players?: { __typename?: 'RootQueryToPlayerConnection', nodes: Array<{ __typename?: 'Player', databaseId: number, custom_fields?: { __typename?: 'Player_CustomFields', excludeFromTables?: boolean | null } | null }> } | null };
+
 export const PlayerFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PlayerFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Player"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]} as unknown as DocumentNode<PlayerFragmentFragment, unknown>;
 export const GetGamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGames"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"month"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"year"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"games"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"dateQuery"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"month"},"value":{"kind":"Variable","name":{"kind":"Name","value":"month"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"year"},"value":{"kind":"Variable","name":{"kind":"Name","value":"year"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acf"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameBlowOut"}},{"kind":"Field","name":{"kind":"Name","value":"gameDate"}},{"kind":"Field","name":{"kind":"Name","value":"gameTeam1"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"captain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PlayerFragment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"goals"}},{"kind":"Field","name":{"kind":"Name","value":"players"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PlayerFragment"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"gameTeam2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"captain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PlayerFragment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"goals"}},{"kind":"Field","name":{"kind":"Name","value":"players"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PlayerFragment"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PlayerFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Player"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]} as unknown as DocumentNode<GetGamesQuery, GetGamesQueryVariables>;
+export const GetPlayersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"players"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"custom_fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"excludeFromTables"}}]}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}}]}}]}}]}}]} as unknown as DocumentNode<GetPlayersQuery, GetPlayersQueryVariables>;

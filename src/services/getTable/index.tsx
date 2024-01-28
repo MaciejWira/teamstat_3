@@ -1,4 +1,5 @@
 import getGames, { GameProps } from "@/services/getGames";
+import getPlayers from "@/services/getPlayers";
 
 export type PlayerStats = {
   id: number;
@@ -15,6 +16,7 @@ export type PlayerStats = {
 
 const getTable = async ({ date }: GameProps = {}) => {
   const { games } = await getGames({ date });
+  const { excludedPlayers } = await getPlayers();
   if (!games)
     return {
       table: [],
@@ -37,6 +39,8 @@ const getTable = async ({ date }: GameProps = {}) => {
     if (teamOneGoals === false || teamTwoGoals === false) return prev;
     const score =
       teamOneGoals > teamTwoGoals ? 1 : teamTwoGoals > teamOneGoals ? 2 : 0;
+
+    // TODO: combine those two
 
     teamOne.players.forEach((player) => {
       if (!player) return;
@@ -114,7 +118,9 @@ const getTable = async ({ date }: GameProps = {}) => {
       }
     });
 
-    return updatedStats;
+    return updatedStats.filter(
+      (player) => !(excludedPlayers || []).includes(player.id)
+    );
   }, [] as PlayerStats[]);
 
   return {

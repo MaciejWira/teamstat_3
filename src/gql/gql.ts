@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query GetGames($month: Int, $year: Int) {\n    games(first: 100, where: { dateQuery: { month: $month, year: $year } }) {\n      nodes {\n        acf {\n          gameBlowOut\n          gameDate\n          gameTeam1 {\n            captain {\n              ...PlayerFragment\n            }\n            goals\n            players {\n              ...PlayerFragment\n            }\n          }\n          gameTeam2 {\n            captain {\n              ...PlayerFragment\n            }\n            goals\n            players {\n              ...PlayerFragment\n            }\n          }\n        }\n        databaseId\n        slug\n        title\n      }\n    }\n  }\n\n  fragment PlayerFragment on Player {\n    databaseId\n    title\n  }\n": types.GetGamesDocument,
     "\n  fragment PlayerFragment on Player {\n    databaseId\n    title\n  }\n": types.PlayerFragmentFragmentDoc,
+    "\n  query GetPlayers {\n    players(first: 100) {\n      nodes {\n        custom_fields {\n          excludeFromTables\n        }\n        databaseId\n      }\n    }\n  }\n": types.GetPlayersDocument,
 };
 
 /**
@@ -39,6 +40,10 @@ export function graphql(source: "\n  query GetGames($month: Int, $year: Int) {\n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment PlayerFragment on Player {\n    databaseId\n    title\n  }\n"): (typeof documents)["\n  fragment PlayerFragment on Player {\n    databaseId\n    title\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetPlayers {\n    players(first: 100) {\n      nodes {\n        custom_fields {\n          excludeFromTables\n        }\n        databaseId\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPlayers {\n    players(first: 100) {\n      nodes {\n        custom_fields {\n          excludeFromTables\n        }\n        databaseId\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

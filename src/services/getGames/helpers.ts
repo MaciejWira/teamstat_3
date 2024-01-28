@@ -1,5 +1,7 @@
 import { graphql } from "@/gql";
 
+// TODO: first 100 might be replaced
+
 export const document = graphql(`
   query GetGames($month: Int, $year: Int) {
     games(first: 100, where: { dateQuery: { month: $month, year: $year } }) {
