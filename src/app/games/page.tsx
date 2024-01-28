@@ -11,12 +11,18 @@ export default async function GamesPage() {
       <ul>
         {(games || []).map((game) => (
           <div key={game.slug}>
-            <Link href={`/game/${game.slug}`} key={game.acf?.gameDate}>
+            <div key={game.acf?.gameDate}>
               {game.acf?.gameDate} |{" "}
               {game?.acf?.gameTeam1?.captain?.[0]?.title || "x"}{" "}
               {game.acf?.gameTeam1?.goals}:{game.acf?.gameTeam2?.goals}{" "}
               {game?.acf?.gameTeam2?.captain?.[0]?.title || "x"}
-            </Link>
+            </div>
+            {/* <Link href={`/game/${game.slug}`} key={game.acf?.gameDate}>
+              {game.acf?.gameDate} |{" "}
+              {game?.acf?.gameTeam1?.captain?.[0]?.title || "x"}{" "}
+              {game.acf?.gameTeam1?.goals}:{game.acf?.gameTeam2?.goals}{" "}
+              {game?.acf?.gameTeam2?.captain?.[0]?.title || "x"}
+            </Link> */}
           </div>
         ))}
       </ul>
