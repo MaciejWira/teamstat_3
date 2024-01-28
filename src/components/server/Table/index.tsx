@@ -87,7 +87,7 @@ const Table: React.FC<Props> = async ({
             ];
 
             return (
-              <tr key={row.id} className={classNames()}>
+              <tr key={row.id}>
                 {values.map((el, indexTd) => (
                   <td
                     className={classNames(
@@ -97,7 +97,7 @@ const Table: React.FC<Props> = async ({
                       indexTr === 2 && indexTd === 0 && styles["Td--third"],
                       ...(columns[indexTd].additionalClasses || [])
                     )}
-                    key={el}
+                    key={indexTd}
                   >
                     {el}
                   </td>

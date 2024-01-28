@@ -21,7 +21,7 @@ const getGames = async ({ date }: GameProps = {}) => {
 
   return {
     games: data.games.nodes,
-    lastGameDate: data.games.nodes[0].acf?.gameDate,
+    lastGameDate: data.games.nodes[0]?.acf?.gameDate,
   };
 };
 

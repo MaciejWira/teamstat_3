@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "@/styles/globals.scss";
 import Container from "@/components/server/Container";
+import Header from "@/components/server/Header";
+
+import style from "./Layout.module.scss";
 
 export const metadata: Metadata = {
   title: "Teamstat",
@@ -15,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>
+        <main className={style.Main}>
+          <Header />
           <Container>{children}</Container>
         </main>
       </body>

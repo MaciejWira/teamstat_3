@@ -43,7 +43,7 @@ const FilterNav = () => {
   }, []);
 
   return (
-    <div>
+    <div className={styles.Container}>
       <select
         className={styles.Select}
         value={url}
