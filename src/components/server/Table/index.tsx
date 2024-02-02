@@ -2,8 +2,13 @@ import FilterNav from "@/components/client/FilterNav";
 import { PlayerStats, sortTable } from "@/services/getTable";
 import classNames from "@/services/classNames";
 import getGames from "@/services/getGames";
+import HeadingWrapper from "@/components/server/HeadingWrapper";
+import Heading from "@/components/server/Heading";
+import TextC, { TextSpan } from "@/components/server/TextC";
 
+import { columns } from "./utils";
 import styles from "./Table.module.scss";
+import Separator from "@/components/server/Separator";
 
 type Props = {
   heading?: string;
@@ -12,110 +17,112 @@ type Props = {
   rounds?: number;
 };
 
-const columns = [
-  { short: "#" },
-  {
-    long: "Zawodnik",
-    short: "Zawodnik",
-    isLong: true,
-    additionalClasses: [
-      styles["Td--left"],
-      styles["Td--white"],
-      styles["Td--wide"],
-    ],
-  },
-  { long: "Mecze", short: "M" },
-  { long: "Punkty", short: "Pkt" },
-  { long: "Gole", short: "G" },
-  { long: "Wygrane", short: "W" },
-  { long: "Remisy", short: "R" },
-  { long: "Przegrane", short: "P" },
-  { long: "Gole strzelone", short: "G+" },
-  { long: "Gole stracone", short: "G-" },
-];
-
 const Table: React.FC<Props> = async ({
   heading,
   table,
-  rounds,
+  rounds = 0,
   roundsText = "Ilość kolejek",
 }) => {
   const { lastGameDate } = await getGames();
   return (
     <div className={styles.Container}>
       <FilterNav />
-      <div className={styles.Header}>
-        {heading && <h2 className={styles.Heading}>{heading}</h2>}
-        <p>
-          {rounds && (
+      <HeadingWrapper>
+        {heading && <Heading className={styles.Heading}>{heading}</Heading>}
+        <TextC className={styles.SubHeading}>
+          {
             <>
-              {roundsText}: <span className={styles.Strong}>{rounds}</span>
-              <span className={styles.Break}>|</span>
+              <span>
+                {roundsText}: <TextSpan theme={["white"]}>{rounds}</TextSpan>
+              </span>
+              <Separator />
             </>
-          )}
-          Ostatni mecz: <span className={styles.Strong}>{lastGameDate}</span>
-        </p>
-      </div>
-      <table>
-        <tbody>
-          <tr>
-            {columns.map((column) => (
-              <th
-                className={classNames(
-                  styles.Td,
-                  styles.Th,
-                  ...(column.additionalClasses || [])
-                )}
-                key={column.short}
-              >
-                {column.isLong ? column.long : column.short}
-              </th>
-            ))}
-          </tr>
-          {sortTable(table).map((row, indexTr) => {
-            const values = [
-              indexTr + 1,
-              row.title,
-              row.games,
-              row.points,
-              row.goalsDifference,
-              row.wins,
-              row.draws,
-              row.losses,
-              row.goalsFor,
-              row.goalsAgainst,
-            ];
-
-            return (
-              <tr key={row.id}>
-                {values.map((el, indexTd) => (
-                  <td
+          }
+          <span>
+            Ostatni mecz: <TextSpan theme={["white"]}>{lastGameDate}</TextSpan>
+          </span>
+        </TextC>
+      </HeadingWrapper>
+      {!rounds ? (
+        <TextC theme={["white", "large"]}>Brak meczów</TextC>
+      ) : (
+        <>
+          <table className={styles.Table}>
+            <tbody>
+              <tr>
+                {columns.map((column) => (
+                  <th
                     className={classNames(
                       styles.Td,
-                      indexTr === 0 && indexTd === 0 && styles["Td--first"],
-                      indexTr === 1 && indexTd === 0 && styles["Td--second"],
-                      indexTr === 2 && indexTd === 0 && styles["Td--third"],
-                      ...(columns[indexTd].additionalClasses || [])
+                      styles.Th,
+                      ...(column.additionalClassesCell || [])
                     )}
-                    key={indexTd}
+                    key={column.short}
                   >
-                    {el}
-                  </td>
+                    <TextSpan
+                      className={classNames(
+                        ...(column.additionalClasses || [])
+                      )}
+                    >
+                      {column.isLong ? column.long : column.short}
+                    </TextSpan>
+                  </th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className={styles.Legend}>
-        {columns.map((column) =>
-          column.long && column.long !== column.short ? (
-            <p key={column.short} className={styles.Text}>
-              {column.short} - {column.long}
-            </p>
-          ) : null
-        )}
-      </div>
+              {sortTable(table).map((row, indexTr) => {
+                const values = [
+                  indexTr + 1,
+                  row.title,
+                  row.games,
+                  row.points,
+                  row.goalsDifference,
+                  row.wins,
+                  row.draws,
+                  row.losses,
+                  row.goalsFor,
+                  row.goalsAgainst,
+                ];
+
+                return (
+                  <tr key={row.id} className={styles.Tr}>
+                    {values.map((el, indexTd) => (
+                      <td
+                        className={classNames(
+                          styles.Td,
+                          indexTr === 0 && indexTd === 0 && styles["Td--first"],
+                          indexTr === 1 &&
+                            indexTd === 0 &&
+                            styles["Td--second"],
+                          indexTr === 2 && indexTd === 0 && styles["Td--third"],
+                          ...(columns[indexTd].additionalClassesCell || [])
+                        )}
+                        key={indexTd}
+                      >
+                        <TextSpan
+                          className={classNames(
+                            ...(columns[indexTd].additionalClasses || [])
+                          )}
+                        >
+                          {el}
+                        </TextSpan>
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className={styles.Legend}>
+            {columns.map((column) =>
+              column.long && column.long !== column.short ? (
+                <TextC key={column.short} className={styles.Text}>
+                  {column.short} - {column.long}
+                </TextC>
+              ) : null
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

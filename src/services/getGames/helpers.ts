@@ -40,10 +40,3 @@ export const document = graphql(`
     title
   }
 `);
-
-const PlayerFragment = graphql(`
-  fragment PlayerFragment on Player {
-    databaseId
-    title
-  }
-`);

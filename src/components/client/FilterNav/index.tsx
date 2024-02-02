@@ -1,8 +1,9 @@
 "use client";
 
+import { TextSpan } from "@/components/server/TextC";
 import styles from "./FilterNav.module.scss";
 
-import Link from "next/link";
+import LinkC from "@/components/server/LinkC";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 
@@ -50,7 +51,7 @@ const FilterNav = () => {
         onChange={(e) => changeHandler(e.target.value)}
       >
         <option value="" disabled={!url}>
-          Miesięczne
+          <TextSpan>Miesięczne</TextSpan>
         </option>
         {getMonths().map((month) => (
           <option key={month} value={month}>
@@ -75,9 +76,9 @@ const FilterNav = () => {
           </option>
         ))}
       </select>
-      <Link className={styles.Link} href="/table">
-        Cała tabela
-      </Link>
+      <LinkC className={styles.Link} href="/table">
+        <TextSpan theme={["white"]}>Cała tabela</TextSpan>
+      </LinkC>
     </div>
   );
 };

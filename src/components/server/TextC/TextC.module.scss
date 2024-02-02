@@ -1,0 +1,20 @@
+.TextC {
+  color: rgb(170, 170, 170);
+  font-size: 12px;
+
+  @include bp(sm) {
+    font-size: 14px;
+  }
+
+  &--white {
+    color: white;
+  }
+
+  &--large {
+    font-size: 14px;
+
+    @include bp(sm) {
+      font-size: 16px;
+    }
+  }
+}

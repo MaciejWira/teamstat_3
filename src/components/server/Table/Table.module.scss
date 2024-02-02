@@ -1,81 +1,83 @@
 .Container {
   max-width: 100%;
   overflow: auto;
-  @include text-table(grey);
-}
 
-.Header {
-  margin-bottom: 25px;
-}
-
-.Heading {
-  margin-bottom: 10px;
-}
-
-.Td {
-  border: none;
-  border-bottom: 1px solid #222;
-  text-align: center;
-
-  padding: 7px 10px;
-
-  &--left {
-    text-align: left;
+  .Heading {
+    margin-bottom: 10px;
   }
 
-  &--white {
+  .SubHeading {
+    display: flex;
+  }
+
+  .Table {
+    border-spacing: 0;
+  }
+
+  .Tr {
+    &:nth-child(2n) {
+      background-color: rgba(grey, 0.1);
+    }
+  }
+
+  .Td {
+    border: none;
+    border-bottom: 1px solid transparent;
+    text-align: center;
+    padding: 5px 11px;
+
+    &--wide {
+      width: 80px;
+      min-width: 80px;
+
+      @include bp(sm) {
+        width: 100px;
+        min-width: 100px;
+      }
+    }
+
+    &--left {
+      text-align: left;
+    }
+
+    &--first {
+      border-bottom: 1px solid gold;
+    }
+
+    &--second {
+      border-bottom: 1px solid silver;
+    }
+
+    &--third {
+      border-bottom: 1px solid brown;
+    }
+
+    &:nth-child(n + 9) {
+      display: none;
+      @include bp(sm) {
+        display: table-cell;
+      }
+    }
+  }
+
+  .Th {
+    font-weight: 600;
+  }
+
+  .Legend {
+    padding-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .Text {
+    margin-bottom: 7px;
+  }
+
+  .Strong {
     color: white;
   }
 
-  &--wide {
-    width: 80px;
-    min-width: 80px;
-
-    @include bp(sm) {
-      width: 100px;
-      min-width: 100px;
-    }
+  .White {
+    color: white;
   }
-
-  &--first {
-    border-bottom: 1px solid gold;
-  }
-
-  &--second {
-    border-bottom: 1px solid silver;
-  }
-
-  &--third {
-    border-bottom: 1px solid brown;
-  }
-
-  &:nth-child(n + 9) {
-    display: none;
-    @include bp(sm) {
-      display: table-cell;
-    }
-  }
-}
-
-.Th {
-  font-weight: 600;
-}
-
-.Legend {
-  padding-top: 15px;
-  margin-bottom: 15px;
-}
-
-.Text {
-  margin-bottom: 7px;
-}
-
-.Strong {
-  color: white;
-}
-
-.Break {
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
 }

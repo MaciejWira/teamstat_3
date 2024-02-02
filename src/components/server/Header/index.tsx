@@ -1,6 +1,7 @@
+import LinkC from "@/components/server/LinkC";
 import Container from "@/components/server/Container";
+import { TextSpan } from "@/components/server/TextC";
 import style from "./Header.module.scss";
-import Link from "next/link";
 
 const items = [
   { name: "Tabela", href: "/" },
@@ -13,9 +14,9 @@ const Header = () => (
       <div className={style.Main}>
         <nav className={style.Nav}>
           {items.map((el) => (
-            <Link key={el.name} href={el.href} className={style.Link}>
-              {el.name}
-            </Link>
+            <LinkC key={el.name} href={el.href} className={style.Link}>
+              <TextSpan theme={["white", "large"]}>{el.name}</TextSpan>
+            </LinkC>
           ))}
         </nav>
       </div>
