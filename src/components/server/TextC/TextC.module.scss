@@ -10,6 +10,18 @@
     color: white;
   }
 
+  &--bold {
+    font-weight: bold;
+  }
+
+  &--italic {
+    font-style: italic;
+  }
+
+  &--uppercase {
+    text-transform: uppercase;
+  }
+
   &--large {
     font-size: 14px;
 

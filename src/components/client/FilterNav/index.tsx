@@ -51,7 +51,7 @@ const FilterNav = () => {
         onChange={(e) => changeHandler(e.target.value)}
       >
         <option value="" disabled={!url}>
-          <TextSpan>Miesięczne</TextSpan>
+          Miesięczne
         </option>
         {getMonths().map((month) => (
           <option key={month} value={month}>
@@ -77,7 +77,7 @@ const FilterNav = () => {
         ))}
       </select>
       <LinkC className={styles.Link} href="/table">
-        <TextSpan theme={["white"]}>Cała tabela</TextSpan>
+        <TextSpan theme={["large", "bold"]}>CAŁA TABELA</TextSpan>
       </LinkC>
     </div>
   );

@@ -15,7 +15,9 @@ const Header = () => (
         <nav className={style.Nav}>
           {items.map((el) => (
             <LinkC key={el.name} href={el.href} className={style.Link}>
-              <TextSpan theme={["white", "large"]}>{el.name}</TextSpan>
+              <TextSpan theme={["white", "large", "uppercase", "bold"]}>
+                {el.name}
+              </TextSpan>
             </LinkC>
           ))}
         </nav>

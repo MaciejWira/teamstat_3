@@ -16,7 +16,7 @@
 
   .Tr {
     &:nth-child(2n) {
-      background-color: rgba(grey, 0.1);
+      background-color: $black-light;
     }
   }
 

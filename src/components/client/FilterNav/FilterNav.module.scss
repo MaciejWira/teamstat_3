@@ -6,8 +6,8 @@
   background-color: black;
 }
 
-.Select,
-.Link {
-  @include text-table;
+.Select {
+  font-size: 14px;
+  color: white;
   margin-right: 8px;
 }
