@@ -5,10 +5,11 @@ import getGames from "@/services/getGames";
 import HeadingWrapper from "@/components/server/HeadingWrapper";
 import Heading from "@/components/server/Heading";
 import TextC, { TextSpan } from "@/components/server/TextC";
+import Separator from "@/components/server/Separator";
+import LinkC from "@/components/server/LinkC";
 
 import { columns } from "./utils";
 import styles from "./Table.module.scss";
-import Separator from "@/components/server/Separator";
 
 type Props = {
   heading?: string;
@@ -72,7 +73,9 @@ const Table: React.FC<Props> = async ({
               {sortTable(table).map((row, indexTr) => {
                 const values = [
                   indexTr + 1,
-                  row.title,
+                  row.slug
+                    ? { name: row.title, href: `/player/${row.slug}` }
+                    : row.title,
                   row.games,
                   row.points,
                   row.goalsDifference,
@@ -85,28 +88,42 @@ const Table: React.FC<Props> = async ({
 
                 return (
                   <tr key={row.id} className={styles.Tr}>
-                    {values.map((el, indexTd) => (
-                      <td
-                        className={classNames(
-                          styles.Td,
-                          indexTr === 0 && indexTd === 0 && styles["Td--first"],
-                          indexTr === 1 &&
-                            indexTd === 0 &&
-                            styles["Td--second"],
-                          indexTr === 2 && indexTd === 0 && styles["Td--third"],
-                          ...(columns[indexTd].additionalClassesCell || [])
-                        )}
-                        key={indexTd}
-                      >
-                        <TextSpan
+                    {values.map((el, indexTd) => {
+                      const _el =
+                        typeof el === "string" || typeof el === "number" ? (
+                          <TextSpan theme={columns[indexTd].theme || []}>
+                            {el}
+                          </TextSpan>
+                        ) : (
+                          <LinkC
+                            href={el.href}
+                            theme={columns[indexTd].theme || []}
+                          >
+                            {el.name}
+                          </LinkC>
+                        );
+
+                      return (
+                        <td
                           className={classNames(
-                            ...(columns[indexTd].additionalClasses || [])
+                            styles.Td,
+                            indexTr === 0 &&
+                              indexTd === 0 &&
+                              styles["Td--first"],
+                            indexTr === 1 &&
+                              indexTd === 0 &&
+                              styles["Td--second"],
+                            indexTr === 2 &&
+                              indexTd === 0 &&
+                              styles["Td--third"],
+                            ...(columns[indexTd].additionalClassesCell || [])
                           )}
+                          key={indexTd}
                         >
-                          {el}
-                        </TextSpan>
-                      </td>
-                    ))}
+                          {_el}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}

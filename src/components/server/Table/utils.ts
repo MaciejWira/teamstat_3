@@ -6,7 +6,7 @@ export const columns = [
     long: "Zawodnik",
     short: "Zawodnik",
     isLong: true,
-    additionalClasses: [styles["White"]],
+    theme: ["white"],
     additionalClassesCell: [styles["Td--wide"], styles["Td--left"]],
   },
   { long: "Mecze", short: "M" },

@@ -3,6 +3,7 @@ import getPlayers from "@/services/getPlayers";
 
 export type PlayerStats = {
   id: number;
+  slug?: string;
   title: string;
   games: number;
   wins: number;
@@ -67,6 +68,7 @@ const getTable = async ({ date }: GameProps = {}) => {
       } else {
         updatedStats.push({
           id: player.databaseId,
+          slug: player.slug || undefined,
           title: player.title || "noName",
           games: 1,
           wins: score === 1 ? 1 : 0,
@@ -105,6 +107,7 @@ const getTable = async ({ date }: GameProps = {}) => {
       } else {
         updatedStats.push({
           id: player.databaseId,
+          slug: player.slug || undefined,
           title: player.title || "noName",
           games: 1,
           wins: score === 2 ? 1 : 0,

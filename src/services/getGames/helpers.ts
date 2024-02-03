@@ -37,6 +37,7 @@ export const document = graphql(`
 
   fragment PlayerFragment on Player {
     databaseId
+    slug
     title
   }
 `);

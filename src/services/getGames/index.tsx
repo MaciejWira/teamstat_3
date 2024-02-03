@@ -6,9 +6,10 @@ export type GameProps = {
     year: number;
     month?: number;
   };
+  playerId?: number;
 };
 
-const getGames = async ({ date }: GameProps = {}) => {
+const getGames = async ({ date, playerId }: GameProps = {}) => {
   const data = await getDataFetch({
     document,
     variables: {
@@ -19,8 +20,24 @@ const getGames = async ({ date }: GameProps = {}) => {
   });
   if (!data.games || !data.games.nodes) return {};
 
+  const games = (() => {
+    if (playerId) {
+      return data.games.nodes.filter(
+        (node) =>
+          node.acf?.gameTeam1?.players?.find(
+            (player) => player?.databaseId === playerId
+          ) ||
+          node.acf?.gameTeam2?.players?.find(
+            (player) => player?.databaseId === playerId
+          )
+      );
+    }
+
+    return data.games.nodes;
+  })();
+
   return {
-    games: data.games.nodes,
+    games,
     lastGameDate: data.games.nodes[0]?.acf?.gameDate,
   };
 };
