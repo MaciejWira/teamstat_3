@@ -1,5 +1,6 @@
 import getGames, { GameProps } from "@/services/getGames";
 import getPlayers from "@/services/getPlayers";
+import { teamHandler } from "@/services/getTable/utils";
 
 export type PlayerStats = {
   id: number;
@@ -25,7 +26,6 @@ const getTable = async ({ date }: GameProps = {}) => {
     };
 
   const playersWithStats = games.reduce((prev, curr) => {
-    const updatedStats = [...prev];
     const teamOne = curr.acf?.gameTeam1 ?? false;
     const teamTwo = curr.acf?.gameTeam2 ?? false;
     if (
@@ -38,90 +38,26 @@ const getTable = async ({ date }: GameProps = {}) => {
     const teamOneGoals = teamOne.goals ?? false;
     const teamTwoGoals = teamTwo.goals ?? false;
     if (teamOneGoals === false || teamTwoGoals === false) return prev;
-    const score =
-      teamOneGoals > teamTwoGoals ? 1 : teamTwoGoals > teamOneGoals ? 2 : 0;
+    const goals: [number, number] = [teamOneGoals, teamTwoGoals];
 
     // TODO: combine those two
 
-    teamOne.players.forEach((player) => {
-      if (!player) return;
-      const existingPlayerIndex = updatedStats.findIndex(
-        (_player) => _player.id === player.databaseId
-      );
-      if (existingPlayerIndex >= 0) {
-        const prevStats = updatedStats[existingPlayerIndex];
-        const updatedPlayerStats: PlayerStats = {
-          ...prevStats,
-          games: prevStats.games + 1,
-          wins: score === 1 ? prevStats.wins + 1 : prevStats.wins,
-          draws: score === 0 ? prevStats.draws + 1 : prevStats.draws,
-          losses: score === 2 ? prevStats.losses + 1 : prevStats.losses,
-          goalsFor: prevStats.goalsFor + teamOneGoals,
-          goalsAgainst: prevStats.goalsAgainst + teamTwoGoals,
-          goalsDifference:
-            prevStats.goalsFor +
-            teamOneGoals -
-            (prevStats.goalsAgainst + teamTwoGoals),
-          points: prevStats.points + (score === 1 ? 3 : score === 2 ? 0 : 1),
-        };
-        updatedStats[existingPlayerIndex] = updatedPlayerStats;
-      } else {
-        updatedStats.push({
-          id: player.databaseId,
-          slug: player.slug || undefined,
-          title: player.title || "noName",
-          games: 1,
-          wins: score === 1 ? 1 : 0,
-          draws: score === 0 ? 1 : 0,
-          losses: score === 2 ? 1 : 0,
-          goalsFor: teamOneGoals,
-          goalsAgainst: teamTwoGoals,
-          goalsDifference: teamOneGoals - teamTwoGoals,
-          points: score === 1 ? 3 : score === 2 ? 0 : 1,
-        });
-      }
+    const teamOneStats = teamHandler({
+      team: teamOne,
+      teamNo: 1,
+      currStats: prev,
+      goals,
     });
 
-    teamTwo.players.forEach((player) => {
-      if (!player) return;
-      const existingPlayerIndex = updatedStats.findIndex(
-        (_player) => _player.id === player.databaseId
-      );
-      if (existingPlayerIndex >= 0) {
-        const prevStats = updatedStats[existingPlayerIndex];
-        const updatedPlayerStats: PlayerStats = {
-          ...prevStats,
-          games: prevStats.games + 1,
-          wins: score === 2 ? prevStats.wins + 1 : prevStats.wins,
-          draws: score === 0 ? prevStats.draws + 1 : prevStats.draws,
-          losses: score === 1 ? prevStats.losses + 1 : prevStats.losses,
-          goalsFor: prevStats.goalsFor + teamTwoGoals,
-          goalsAgainst: prevStats.goalsAgainst + teamOneGoals,
-          goalsDifference:
-            prevStats.goalsFor +
-            teamTwoGoals -
-            (prevStats.goalsAgainst + teamOneGoals),
-          points: prevStats.points + (score === 2 ? 3 : score === 1 ? 0 : 1),
-        };
-        updatedStats[existingPlayerIndex] = updatedPlayerStats;
-      } else {
-        updatedStats.push({
-          id: player.databaseId,
-          slug: player.slug || undefined,
-          title: player.title || "noName",
-          games: 1,
-          wins: score === 2 ? 1 : 0,
-          draws: score === 0 ? 1 : 0,
-          losses: score === 1 ? 1 : 0,
-          goalsFor: teamTwoGoals,
-          goalsAgainst: teamOneGoals,
-          goalsDifference: teamTwoGoals - teamOneGoals,
-          points: score === 2 ? 3 : score === 1 ? 0 : 1,
-        });
-      }
+    // teamTwoStats receive teamOneStats as param
+    const teamTwoStats = teamHandler({
+      team: teamTwo,
+      teamNo: 2,
+      currStats: teamOneStats,
+      goals,
     });
 
-    return updatedStats.filter(
+    return teamTwoStats.filter(
       (player) => !(excludedPlayers || []).includes(player.id)
     );
   }, [] as PlayerStats[]);

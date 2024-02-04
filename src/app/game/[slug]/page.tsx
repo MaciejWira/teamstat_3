@@ -2,8 +2,9 @@ import getGame from "@/services/getGame";
 import TextC, { TextSpan } from "@/components/server/TextC";
 import HeadingWrapper from "@/components/server/HeadingWrapper";
 import Heading from "@/components/server/Heading";
+import LinkC from "@/components/server/LinkC";
+import playerUrl from "@/services/playerUrl";
 import style from "./GamePage.module.scss";
-import { Fragment } from "react";
 
 export default async function GamePage({
   params: { slug },
@@ -18,22 +19,22 @@ export default async function GamePage({
 
   const { gameDate, gameTeam1, gameTeam2 } = game;
 
-  const captainOne = gameTeam1?.captain?.[0];
-  const captainTwo = gameTeam2?.captain?.[0];
-  const playersOne = (gameTeam1?.players || []).filter(
-    (el) => el?.databaseId !== captainOne?.databaseId
-  );
-  const playersTwo = (gameTeam2?.players || []).filter(
-    (el) => el?.databaseId !== captainTwo?.databaseId
-  );
-  const max = Math.max(playersOne.length, playersTwo.length);
+  const teams = ([gameTeam1, gameTeam2] as const).map((team) => ({
+    captain: team?.captain?.[0],
+    players: (team?.players || []).filter(
+      (el) => el?.databaseId !== team?.captain?.[0]?.databaseId
+    ),
+  }));
+
+  const captainOne = teams[0]?.captain;
+  const captainTwo = teams[1]?.captain;
+
+  const max = Math.max(teams[0].players.length, teams[1].players.length);
 
   const playersPaired = Array.from({ length: max }).map((el, index) => [
-    playersOne[index]?.title || null,
-    playersTwo[index]?.title || null,
+    teams[0].players[index] || null,
+    teams[1].players[index] || null,
   ]);
-
-  console.log(playersPaired);
 
   return (
     <div className={style.Container}>
@@ -56,24 +57,21 @@ export default async function GamePage({
           </tr>
           {captainOne && captainTwo && (
             <tr className={style.Tr}>
-              <td>
-                <TextSpan>{captainOne?.title}</TextSpan>{" "}
-                <TextSpan theme={["white"]}>(k)</TextSpan>
-              </td>
-              <td>
-                <TextSpan>{captainTwo?.title}</TextSpan>{" "}
-                <TextSpan theme={["white"]}>(k)</TextSpan>
-              </td>
+              {[captainOne, captainTwo].map((c) => (
+                <td key={c.databaseId}>
+                  <LinkC href={playerUrl(c?.slug || "")}>{c?.title}</LinkC>{" "}
+                  <TextSpan theme={["white"]}>(k)</TextSpan>
+                </td>
+              ))}
             </tr>
           )}
           {playersPaired.map((pair) => (
-            <tr className={style.Tr} key={pair[0] || pair[1]}>
-              <td>
-                <TextSpan>{pair[0]}</TextSpan>
-              </td>
-              <td>
-                <TextSpan>{pair[1]}</TextSpan>
-              </td>
+            <tr className={style.Tr} key={pair[0]?.slug || pair[1]?.slug}>
+              {(pair || []).map((el) => (
+                <td key={el?.databaseId}>
+                  <LinkC href={playerUrl(el?.slug || "")}>{el?.title}</LinkC>
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

@@ -7,6 +7,7 @@ import Heading from "@/components/server/Heading";
 import TextC, { TextSpan } from "@/components/server/TextC";
 import Separator from "@/components/server/Separator";
 import LinkC from "@/components/server/LinkC";
+import playerUrl from "@/services/playerUrl";
 
 import { columns } from "./utils";
 import styles from "./Table.module.scss";
@@ -60,11 +61,7 @@ const Table: React.FC<Props> = async ({
                     )}
                     key={column.short}
                   >
-                    <TextSpan
-                      className={classNames(
-                        ...(column.additionalClasses || [])
-                      )}
-                    >
+                    <TextSpan theme={column.theme}>
                       {column.isLong ? column.long : column.short}
                     </TextSpan>
                   </th>
@@ -74,7 +71,7 @@ const Table: React.FC<Props> = async ({
                 const values = [
                   indexTr + 1,
                   row.slug
-                    ? { name: row.title, href: `/player/${row.slug}` }
+                    ? { name: row.title, href: playerUrl(row.slug) }
                     : row.title,
                   row.games,
                   row.points,

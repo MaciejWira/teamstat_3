@@ -8,14 +8,12 @@ export const document = graphql(`
         gameTeam1 {
           captain {
             ... on Player {
-              databaseId
-              title
+              ...PlayerFragment
             }
           }
           players {
             ... on Player {
-              databaseId
-              title
+              ...PlayerFragment
             }
           }
           goals
@@ -23,14 +21,12 @@ export const document = graphql(`
         gameTeam2 {
           captain {
             ... on Player {
-              databaseId
-              title
+              ...PlayerFragment
             }
           }
           players {
             ... on Player {
-              databaseId
-              title
+              ...PlayerFragment
             }
           }
           goals
