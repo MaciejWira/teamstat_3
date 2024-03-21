@@ -10,7 +10,11 @@ import { useCallback } from "react";
 const startYear = 2023;
 const startMonth = 11;
 
-const FilterNav = () => {
+type Props = {
+  isCaptains?: boolean;
+};
+
+const FilterNav: React.FC<Props> = ({ isCaptains }) => {
   const { push } = useRouter();
   const { year, month } = useParams();
 
@@ -36,12 +40,15 @@ const FilterNav = () => {
     return years.reverse();
   }, []);
 
-  const changeHandler = useCallback((target: string) => {
-    if (target === "/" || !target) push("/");
-    else {
-      push(`/table/${target}`);
-    }
-  }, []);
+  const changeHandler = useCallback(
+    (target: string) => {
+      if (target === "/" || !target) push("/");
+      else {
+        push(`/${isCaptains ? "table-captains" : "table"}/${target}`);
+      }
+    },
+    [isCaptains, push]
+  );
 
   return (
     <div className={styles.Container}>
@@ -78,6 +85,9 @@ const FilterNav = () => {
       </select>
       <LinkC className={styles.Link} href="/table">
         <TextSpan theme={["large", "bold"]}>CAŁA TABELA</TextSpan>
+      </LinkC>
+      <LinkC className={styles.Link} href="/table-captains">
+        <TextSpan theme={["large", "bold"]}>KAPITANOWIE</TextSpan>
       </LinkC>
     </div>
   );

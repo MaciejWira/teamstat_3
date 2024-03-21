@@ -16,7 +16,13 @@ export type PlayerStats = {
   points: number;
 };
 
-const getTable = async ({ date }: GameProps = {}) => {
+const initialArr: PlayerStats[] = [];
+
+type TableProps = GameProps & {
+  onlyCaptains?: boolean;
+};
+
+const getTable = async ({ date, onlyCaptains }: TableProps = {}) => {
   const { games } = await getGames({ date });
   const { excludedPlayers } = await getPlayers();
   if (!games)
@@ -40,13 +46,12 @@ const getTable = async ({ date }: GameProps = {}) => {
     if (teamOneGoals === false || teamTwoGoals === false) return prev;
     const goals: [number, number] = [teamOneGoals, teamTwoGoals];
 
-    // TODO: combine those two
-
     const teamOneStats = teamHandler({
       team: teamOne,
       teamNo: 1,
       currStats: prev,
       goals,
+      onlyCaptains,
     });
 
     // teamTwoStats receive teamOneStats as param
@@ -55,18 +60,24 @@ const getTable = async ({ date }: GameProps = {}) => {
       teamNo: 2,
       currStats: teamOneStats,
       goals,
+      onlyCaptains,
     });
 
     return teamTwoStats.filter(
       (player) => !(excludedPlayers || []).includes(player.id)
     );
-  }, [] as PlayerStats[]);
+  }, initialArr);
 
   return {
     table: playersWithStats,
     rounds: games.length,
   };
 };
+
+export const getCaptainsTable = async ({
+  date,
+}: Omit<TableProps, "onlyCaptains"> = {}) =>
+  getTable({ date, onlyCaptains: true });
 
 export const sortTable = (table: PlayerStats[]) => {
   const _table = [...table];

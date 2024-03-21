@@ -16,7 +16,6 @@ const LinkC: React.FC<Props> = (props) => (
       ...props,
       theme: undefined,
       className: undefined,
-      classNameText: undefined,
     }}
     className={classNames(style.Link, props.className)}
   >

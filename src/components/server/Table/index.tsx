@@ -17,6 +17,7 @@ type Props = {
   roundsText?: string;
   table: PlayerStats[];
   rounds?: number;
+  isCaptains?: boolean;
 };
 
 const Table: React.FC<Props> = async ({
@@ -24,11 +25,12 @@ const Table: React.FC<Props> = async ({
   table,
   rounds = 0,
   roundsText = "Ilość kolejek",
+  isCaptains,
 }) => {
   const { lastGameDate } = await getGames();
   return (
     <div className={styles.Container}>
-      <FilterNav />
+      <FilterNav isCaptains={isCaptains} />
       <HeadingWrapper>
         {heading && <Heading className={styles.Heading}>{heading}</Heading>}
         <TextC className={styles.SubHeading}>
