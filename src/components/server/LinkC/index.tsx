@@ -10,19 +10,19 @@ type Props = ComponentProps<typeof Link> & {
   classNameText?: string;
 };
 
-const LinkC: React.FC<Props> = (props) => (
-  <Link
-    {...{
-      ...props,
-      theme: undefined,
-      className: undefined,
-    }}
-    className={classNames(style.Link, props.className)}
-  >
-    <TextSpan className={props.classNameText} theme={props.theme}>
-      {props.children}
-    </TextSpan>
-  </Link>
-);
+const LinkC: React.FC<Props> = (props) => {
+  const linkProps = { ...props };
+  delete linkProps.classNameText;
+  delete linkProps.className;
+  delete linkProps.theme;
+
+  return (
+    <Link {...linkProps} className={classNames(style.Link, props.className)}>
+      <TextSpan className={props.classNameText} theme={props.theme}>
+        {props.children}
+      </TextSpan>
+    </Link>
+  );
+};
 
 export default LinkC;

@@ -21,7 +21,7 @@ const ListingGames: React.FC<Props> = ({ games }) => (
           {game.acf?.gameDate}
           <Separator />
           {game?.acf?.gameTeam1?.captain?.[0]?.title || "x"}{" "}
-          {game.acf?.gameTeam1?.goals}:{game.acf?.gameTeam2?.goals}{" "}
+          {game.acf?.gameTeam1?.goals || 0}:{game.acf?.gameTeam2?.goals || 0}{" "}
           {game?.acf?.gameTeam2?.captain?.[0]?.title || "x"}
         </LinkC>
       </div>

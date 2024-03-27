@@ -41,9 +41,9 @@ const getTable = async ({ date, onlyCaptains }: TableProps = {}) => {
       !teamTwo.players
     )
       return prev;
-    const teamOneGoals = teamOne.goals ?? false;
-    const teamTwoGoals = teamTwo.goals ?? false;
-    if (teamOneGoals === false || teamTwoGoals === false) return prev;
+    // gql returns null for 0
+    const teamOneGoals = teamOne.goals || 0;
+    const teamTwoGoals = teamTwo.goals || 0;
     const goals: [number, number] = [teamOneGoals, teamTwoGoals];
 
     const teamOneStats = teamHandler({

@@ -49,10 +49,14 @@ export default async function GamePage({
         <tbody>
           <tr className={style.Tr}>
             <td>
-              <TextSpan theme={["large", "white"]}>{gameTeam1?.goals}</TextSpan>
+              <TextSpan theme={["large", "white"]}>
+                {gameTeam1?.goals || 0}
+              </TextSpan>
             </td>
             <td>
-              <TextSpan theme={["large", "white"]}>{gameTeam2?.goals}</TextSpan>
+              <TextSpan theme={["large", "white"]}>
+                {gameTeam2?.goals || 0}
+              </TextSpan>
             </td>
           </tr>
           {captainOne && captainTwo && (
