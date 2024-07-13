@@ -18,7 +18,9 @@ const Winners = async () => {
       <Heading>Galeria chwały</Heading>
       {winners.map(async (_winner) => {
         const { winner, dateString, month, year } = await _winner;
-        const winsAmount = winner.slug ? winnersAmount[winner.slug] : 0;
+        const winsAmount = winner?.slug ? winnersAmount[winner.slug] : 0;
+
+        if (!winsAmount) return null;
 
         return (
           <TextC
@@ -27,7 +29,7 @@ const Winners = async () => {
           >
             {firstLetterUpperCase(dateString)}
             <Separator />
-            <LinkC theme={["large", "white"]} href={`/player/${winner.slug}`}>
+            <LinkC theme={["large", "white"]} href={`/player/${winner?.slug}`}>
               {winner.title}
             </LinkC>
             {new Array(winsAmount).fill(0).map((el) => (

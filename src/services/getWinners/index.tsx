@@ -30,11 +30,9 @@ type Winners = Awaited<ReturnType<typeof getWinners>>;
 // check how many times did a player win Player of The Month
 export const getWinnersAmount = (winners: Winners) => {
   const winnersAmount: { [key: string]: number } = {};
-  console.log({ winners });
-  winners.forEach(({ winner: { slug } }) => {
-    console.log({ slug });
-    if (!slug) return undefined;
-    winnersAmount[slug] = (winnersAmount[slug] || 0) + 1;
+  winners.forEach(({ winner }) => {
+    if (!winner?.slug) return undefined;
+    winnersAmount[winner?.slug] = (winnersAmount[winner?.slug] || 0) + 1;
   });
   return winnersAmount;
 };
