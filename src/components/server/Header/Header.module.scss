@@ -19,5 +19,13 @@
 }
 
 .Link {
-  margin-right: 10px;
+  margin-right: 7px;
+
+  &:not(:last-child) {
+    &:after {
+      content: "|";
+      color: grey;
+      margin-left: 7px;
+    }
+  }
 }

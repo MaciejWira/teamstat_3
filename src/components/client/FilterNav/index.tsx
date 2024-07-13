@@ -1,14 +1,11 @@
 "use client";
 
-import { TextSpan } from "@/components/server/TextC";
-import styles from "./FilterNav.module.scss";
-
-import LinkC from "@/components/server/LinkC";
-import { useParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
-
-const startYear = 2023;
-const startMonth = 11;
+import { useParams, useRouter } from "next/navigation";
+import { TextSpan } from "@/components/server/TextC";
+import LinkC from "@/components/server/LinkC";
+import { getMonths, getYears } from "@/services/getMonths";
+import styles from "./FilterNav.module.scss";
 
 type Props = {
   isCaptains?: boolean;
@@ -19,26 +16,6 @@ const FilterNav: React.FC<Props> = ({ isCaptains }) => {
   const { year, month } = useParams();
 
   const url = `${year || ""}${(month && `/${month}`) || ""}`;
-
-  const getMonths = useCallback(() => {
-    const date = new Date(`${startYear}-${startMonth}`);
-    const months = [];
-    while (date < new Date()) {
-      months.push(`${date.getFullYear()}/${date.getMonth() + 1}`);
-      date.setMonth(date.getMonth() + 1);
-    }
-    return months.reverse();
-  }, []);
-
-  const getYears = useCallback(() => {
-    let year = startYear;
-    const years = [];
-    while (year <= new Date().getFullYear()) {
-      years.push(`${year}`);
-      year++;
-    }
-    return years.reverse();
-  }, []);
 
   const changeHandler = useCallback(
     (target: string) => {

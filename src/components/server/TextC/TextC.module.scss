@@ -29,4 +29,13 @@
       font-size: 16px;
     }
   }
+
+  &--margin-bottom {
+    margin-bottom: 7px;
+  }
+
+  &--flex {
+    display: flex;
+    align-items: center;
+  }
 }

@@ -6,6 +6,7 @@ import style from "./Header.module.scss";
 const items = [
   { name: "Tabela", href: "/" },
   { name: "Mecze", href: "/games" },
+  { name: "Gracze miesiąca", href: "/winners" },
 ];
 
 const Header = () => (
