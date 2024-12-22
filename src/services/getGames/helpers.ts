@@ -3,8 +3,16 @@ import { graphql } from "@/gql";
 // TODO: first 100 might be replaced
 
 export const document = graphql(`
-  query GetGames($month: Int, $year: Int) {
-    games(first: 100, where: { dateQuery: { month: $month, year: $year } }) {
+  query GetGames($month: Int, $year: Int, $after: String) {
+    games(
+      first: 100
+      after: $after
+      where: { dateQuery: { month: $month, year: $year } }
+    ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         acf {
           gameBlowOut

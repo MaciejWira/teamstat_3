@@ -1,28 +1,78 @@
 import { getDataFetch } from "@/services/getDataFetch";
 import { document } from "./helpers";
 
-export type GameProps = {
+type GameDate = {
   date?: {
     year: number;
     month?: number;
   };
+};
+
+export type GameProps = GameDate & {
   playerId?: number;
 };
 
-const getGames = async ({ date, playerId }: GameProps = {}) => {
+type FetchGamesType = GameDate & {
+  endCursor?: string | null;
+};
+
+type RecurringFetchGamesType = FetchGamesType & {
+  hasNextPage?: boolean;
+  nodes?: Awaited<ReturnType<typeof fetchGames>>["nodes"];
+};
+
+const fetchGames = async ({ date, endCursor = null }: FetchGamesType) => {
   const data = await getDataFetch({
     document,
     variables: {
       year: date?.year,
       month: date?.month,
+      after: endCursor || null,
     },
     tags: ["get-games"],
   });
-  if (!data.games || !data.games.nodes) return {};
+
+  const { nodes, pageInfo } = data.games || {};
+
+  return {
+    nodes,
+    hasNextPage: pageInfo?.hasNextPage,
+    endCursor: pageInfo?.endCursor,
+  };
+};
+
+const recurringFetchGames = async ({
+  date,
+  hasNextPage = true,
+  endCursor = null,
+  nodes = [],
+}: RecurringFetchGamesType) => {
+  if (!hasNextPage) return nodes;
+  const {
+    nodes: newNodes,
+    endCursor: newEndCursor,
+    hasNextPage: newHasNextPage,
+  } = await fetchGames({
+    date,
+    endCursor,
+  });
+  return recurringFetchGames({
+    date,
+    nodes: [...nodes, ...(newNodes || [])],
+    endCursor: newEndCursor || null,
+    hasNextPage: !!newHasNextPage,
+  });
+};
+
+const getGames = async ({ date, playerId }: GameProps = {}) => {
+  const nodes = await recurringFetchGames({
+    date,
+  });
 
   const games = (() => {
+    if (!nodes) return undefined;
     if (playerId) {
-      return data.games.nodes.filter(
+      return nodes.filter(
         (node) =>
           node.acf?.gameTeam1?.players?.find(
             (player) => player?.databaseId === playerId
@@ -33,13 +83,15 @@ const getGames = async ({ date, playerId }: GameProps = {}) => {
       );
     }
 
-    return data.games.nodes;
+    return nodes;
   })();
 
-  return {
-    games,
-    lastGameDate: data.games.nodes[0]?.acf?.gameDate,
-  };
+  return nodes && games
+    ? {
+        games,
+        lastGameDate: nodes[0]?.acf?.gameDate,
+      }
+    : {};
 };
 
 export default getGames;
