@@ -4,9 +4,11 @@ import getTable, { sortTable } from "@/services/getTable";
 export const getWinners = async () => {
   return Promise.all(
     getMonthsObj(true).map(async ({ month, year }) => {
-      const winner = sortTable(
-        (await getTable({ date: { month, year } })).table
-      )[0];
+      const { rounds, table } = await getTable({ date: { month, year } });
+      const winner = sortTable({
+        rounds,
+        table,
+      })[0];
 
       const dateString = `${new Date(`${year}-${month}`).toLocaleString(
         "pl-PL",

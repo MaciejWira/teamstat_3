@@ -35,9 +35,11 @@ const playerHandler = ({
   const updatedStats = [...stats];
   if (existingPlayerIndex >= 0) {
     const prevStats = updatedStats[existingPlayerIndex];
+    const games = prevStats.games + 1;
+    const currPoints = result === "win" ? 3 : result === "lose" ? 0 : 1;
     const updatedPlayerStats: PlayerStats = {
       ...prevStats,
-      games: prevStats.games + 1,
+      games,
       wins: result === "win" ? prevStats.wins + 1 : prevStats.wins,
       draws: result === "draw" ? prevStats.draws + 1 : prevStats.draws,
       losses: result === "lose" ? prevStats.losses + 1 : prevStats.losses,
@@ -47,11 +49,16 @@ const playerHandler = ({
         prevStats.goalsFor +
         teamMainGoals -
         (prevStats.goalsAgainst + teamAgainstGoals),
-      points:
-        prevStats.points + (result === "win" ? 3 : result === "lose" ? 0 : 1),
+      points: prevStats.points + currPoints,
+      pointsPerGame: parseFloat(
+        ((prevStats.pointsPerGame * (games - 1) + currPoints) / games).toFixed(
+          3
+        )
+      ),
     };
     updatedStats[existingPlayerIndex] = updatedPlayerStats;
   } else {
+    const points = result === "win" ? 3 : result === "lose" ? 0 : 1;
     updatedStats.push({
       id: player.databaseId,
       slug: player.slug || undefined,
@@ -63,7 +70,8 @@ const playerHandler = ({
       goalsFor: teamMainGoals,
       goalsAgainst: teamAgainstGoals,
       goalsDifference: teamMainGoals - teamAgainstGoals,
-      points: result === "win" ? 3 : result === "lose" ? 0 : 1,
+      points,
+      pointsPerGame: points,
     });
   }
   return updatedStats;

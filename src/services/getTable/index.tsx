@@ -14,6 +14,7 @@ export type PlayerStats = {
   goalsAgainst: number;
   goalsDifference: number;
   points: number;
+  pointsPerGame: number;
 };
 
 const initialArr: PlayerStats[] = [];
@@ -74,18 +75,54 @@ const getTable = async ({ date, onlyCaptains }: TableProps = {}) => {
   };
 };
 
+export type GetTableReturnType = Awaited<ReturnType<typeof getTable>>;
+
 export const getCaptainsTable = async ({
   date,
 }: Omit<TableProps, "onlyCaptains"> = {}) =>
   getTable({ date, onlyCaptains: true });
 
-export const sortTable = (table: PlayerStats[]) => {
-  const _table = [...table];
-  _table.sort((a, b) => {
-    if (b.points === a.points) return b.goalsDifference - a.goalsDifference;
-    return b.points - a.points;
+export type SortProps = keyof Pick<
+  PlayerStats,
+  | "wins"
+  | "games"
+  | "goalsAgainst"
+  | "goalsDifference"
+  | "goalsFor"
+  | "losses"
+  | "points"
+  | "pointsPerGame"
+>;
+
+const sortOrder: SortProps[] = [
+  "points",
+  "goalsDifference",
+  "pointsPerGame",
+  "wins",
+];
+
+export const sortTable = ({
+  table,
+  rounds,
+  factor = "points",
+}: GetTableReturnType & {
+  factor?: SortProps;
+}) => {
+  const sortedTable = [...table].sort((a, b) => {
+    if (b[factor] === a[factor]) {
+      sortOrder.forEach((prop) => {
+        if (b[prop] !== a[prop]) {
+          return b[prop] - a[prop];
+        }
+      });
+    }
+    return b[factor] - a[factor];
   });
-  return _table;
+
+  if (rounds < 5 || factor === "points") return sortedTable;
+  if (rounds < 10)
+    return sortedTable.filter((player) => player.games >= (rounds * 1) / 3);
+  return sortedTable.filter((player) => player.games >= (rounds * 1) / 10);
 };
 
 export default getTable;

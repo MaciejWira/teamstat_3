@@ -80,4 +80,17 @@
   .White {
     color: white;
   }
+
+  .SortButton {
+    background-color: transparent;
+    border: solid 1px white;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+
+    &--active {
+      background-color: white;
+      color: black;
+    }
+  }
 }
