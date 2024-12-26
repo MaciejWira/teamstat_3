@@ -17,7 +17,7 @@ export const columns: {
     theme: ["white"],
     additionalClassesCell: [styles["Td--wide"], styles["Td--left"]],
   },
-  { long: "Mecze", short: "M" },
+  { long: "Mecze", short: "M", sortProp: "games" },
   { long: "Punkty", short: "Pkt", sortProp: "points" },
   { long: "Punkty na mecz", short: "Pkt/M", sortProp: "pointsPerGame" },
   { long: "Gole", short: "G", sortProp: "goalsDifference" },

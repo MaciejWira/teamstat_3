@@ -84,6 +84,7 @@ export const getCaptainsTable = async ({
 
 export type SortProps = keyof Pick<
   PlayerStats,
+  | "games"
   | "wins"
   | "games"
   | "goalsAgainst"
@@ -110,16 +111,19 @@ export const sortTable = ({
 }) => {
   const sortedTable = [...table].sort((a, b) => {
     if (b[factor] === a[factor]) {
+      let returnVal: null | number = null;
       sortOrder.forEach((prop) => {
-        if (b[prop] !== a[prop]) {
-          return b[prop] - a[prop];
+        if (!returnVal && b[prop] !== a[prop]) {
+          returnVal = b[prop] - a[prop];
         }
       });
+      if (returnVal) return returnVal;
     }
     return b[factor] - a[factor];
   });
 
-  if (rounds < 5 || factor === "points") return sortedTable;
+  if (rounds < 5 || factor === "points" || factor === "games")
+    return sortedTable;
   if (rounds < 10)
     return sortedTable.filter((player) => player.games >= (rounds * 1) / 3);
   return sortedTable.filter((player) => player.games >= (rounds * 1) / 10);
