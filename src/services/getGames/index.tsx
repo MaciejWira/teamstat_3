@@ -1,4 +1,5 @@
 import { getDataFetch } from "@/services/getDataFetch";
+import { ResultType } from "@/types/results";
 import { document } from "./helpers";
 
 type GameDate = {
@@ -15,6 +16,14 @@ export type GameProps = GameDate & {
 type FetchGamesType = GameDate & {
   endCursor?: string | null;
 };
+
+export type GameNodeType = NonNullable<
+  Awaited<ReturnType<typeof fetchGames>>["nodes"]
+>[0];
+
+export type GamesType = (GameNodeType & {
+  result?: ResultType;
+})[];
 
 type RecurringFetchGamesType = FetchGamesType & {
   hasNextPage?: boolean;
@@ -68,32 +77,69 @@ const getGames = async ({ date, playerId }: GameProps = {}) => {
   const nodes = await recurringFetchGames({
     date,
   });
+  let currResult: ResultType | undefined = undefined;
+  let maxWinningStreak: number | undefined = undefined;
+  let currWinningStreak = 0;
+  let maxLosingStreak: number | undefined = undefined;
+  let currLosingStreak = 0;
 
-  const games = (() => {
-    if (!nodes) return undefined;
-    if (playerId) {
-      return nodes.filter(
-        (node) =>
-          node.acf?.gameTeam1?.players?.find(
-            (player) => player?.databaseId === playerId
-          ) ||
-          node.acf?.gameTeam2?.players?.find(
-            (player) => player?.databaseId === playerId
-          )
-      );
-    }
+  const games: GamesType = playerId
+    ? nodes.flatMap((node) => {
+        const { gameTeam1, gameTeam2 } = node.acf || {};
+        const isTeam1 = gameTeam1?.players?.some(
+          (player) => player?.databaseId === playerId
+        );
+        const isTeam2 =
+          !isTeam1 &&
+          gameTeam2?.players?.some((player) => player?.databaseId === playerId);
 
-    return nodes;
-  })();
+        // return isTeam1 || isTeam2;
+
+        if (!isTeam1 && !isTeam2) return [];
+        const result: ResultType = (() => {
+          if (gameTeam1?.goals === gameTeam2?.goals) return "draw";
+          if ((gameTeam1?.goals || 0) > (gameTeam2?.goals || 0)) {
+            if (isTeam1) return "win";
+            return "lose";
+          }
+          if (isTeam2) return "win";
+          return "lose";
+        })();
+
+        if (currResult === result) {
+          if (result === "win") {
+            currWinningStreak += 1;
+            maxWinningStreak = Math.max(
+              maxWinningStreak || 0,
+              currWinningStreak
+            );
+          } else if (result === "lose") {
+            currLosingStreak += 1;
+            maxLosingStreak = Math.max(maxLosingStreak || 0, currLosingStreak);
+          }
+        } else {
+          currResult = result;
+          currWinningStreak = result === "win" ? 1 : 0;
+          currLosingStreak = result === "lose" ? 1 : 0;
+        }
+
+        return [
+          {
+            ...node,
+            result,
+          },
+        ];
+      })
+    : nodes;
 
   return nodes && games
     ? {
         games,
         lastGameDate: nodes[0]?.acf?.gameDate,
+        maxWinningStreak,
+        maxLosingStreak,
       }
     : {};
 };
 
 export default getGames;
-
-export type GamesNodesType = NonNullable<Awaited<ReturnType<typeof getGames>>>;

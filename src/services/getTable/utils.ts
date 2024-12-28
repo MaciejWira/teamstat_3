@@ -1,9 +1,8 @@
-import getGames from "@/services/getGames";
+import { GameNodeType } from "@/services/getGames";
 import { PlayerStats } from "@/services/getTable";
+import { ResultType } from "@/types/results";
 
-type GameType = NonNullable<
-  NonNullable<Awaited<ReturnType<typeof getGames>>["games"]>[number]["acf"]
->;
+type GameType = NonNullable<GameNodeType["acf"]>;
 type TeamType = GameType["gameTeam1"] | GameType["gameTeam2"];
 type PlayerType = NonNullable<NonNullable<TeamType>["players"]>[number];
 
@@ -26,7 +25,7 @@ const playerHandler = ({
   stats: PlayerStats[];
   teamMainGoals: number;
   teamAgainstGoals: number;
-  result: "win" | "draw" | "lose";
+  result: ResultType;
 }) => {
   if (!player) return stats;
   const existingPlayerIndex = stats.findIndex(

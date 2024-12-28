@@ -1,3 +1,21 @@
 .LinkText {
   display: flex;
+  align-items: center;
+}
+
+.Result {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: grey;
+  margin-left: 9px;
+
+  &--win {
+    background-color: $green;
+  }
+
+  &--lose {
+    background-color: $red;
+  }
 }

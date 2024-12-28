@@ -1,12 +1,13 @@
 import LinkC from "@/components/server/LinkC";
 import Separator from "@/components/server/Separator";
-import getGames from "@/services/getGames";
-
-import style from "./ListingGames.module.scss";
+import { GamesType } from "@/services/getGames";
+import classNames from "@/services/classNames";
 import TextC from "@/components/server/TextC";
 
+import style from "./ListingGames.module.scss";
+
 type Props = {
-  games: Awaited<ReturnType<typeof getGames>>["games"];
+  games: GamesType;
 };
 
 const ListingGames: React.FC<Props> = ({ games }) => (
@@ -22,6 +23,12 @@ const ListingGames: React.FC<Props> = ({ games }) => (
           <TextC theme={["white", "large"]}>
             {(games || []).length - index}
           </TextC>
+          <div
+            className={classNames(
+              style.Result,
+              game.result && style[`Result--${game.result}`]
+            )}
+          />
           <Separator />
           {game.acf?.gameDate}
           <Separator />
