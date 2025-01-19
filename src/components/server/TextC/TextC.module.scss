@@ -38,6 +38,14 @@
     }
   }
 
+  &--x-large {
+    font-size: 16px;
+
+    @include bp(sm) {
+      font-size: 18px;
+    }
+  }
+
   &--margin-bottom {
     margin-bottom: 7px;
   }

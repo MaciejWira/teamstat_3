@@ -2,8 +2,39 @@ import { getMonthsObj } from "@/services/getMonths";
 import getTable, { sortTable } from "@/services/getTable";
 
 export const getWinners = async () => {
-  return Promise.all(
-    getMonthsObj(true).map(async ({ month, year }) => {
+  const allMonths = getMonthsObj(true);
+  const fullYears: number[] = allMonths.reduce((prev, curr, index) => {
+    if (
+      !prev.includes(curr.year) &&
+      curr.month === 12 &&
+      allMonths[index + 11]?.year === curr.year
+    ) {
+      return [...prev, curr.year];
+    }
+    return prev;
+  }, [] as number[]);
+
+  const yearWinners = await Promise.all(
+    fullYears.map(async (year) => {
+      const { table, rounds } = await getTable({
+        date: {
+          year: +year,
+        },
+      });
+
+      return {
+        winner: sortTable({
+          table,
+          rounds,
+          factor: "points",
+        })[0],
+        year,
+      };
+    })
+  );
+
+  const monthWinners = await Promise.all(
+    allMonths.map(async ({ month, year }) => {
       const { rounds, table } = await getTable({ date: { month, year } });
       const winner = sortTable({
         rounds,
@@ -25,12 +56,18 @@ export const getWinners = async () => {
       };
     })
   );
+
+  return {
+    monthWinners,
+    yearWinners,
+  };
 };
 
-type Winners = Awaited<ReturnType<typeof getWinners>>;
+type MonthWinners = Awaited<ReturnType<typeof getWinners>>[`monthWinners`];
+type YearWinners = Awaited<ReturnType<typeof getWinners>>[`yearWinners`];
 
 // check how many times did a player win Player of The Month
-export const getWinnersAmount = (winners: Winners) => {
+export const getWinnersAmount = (winners: MonthWinners | YearWinners) => {
   const winnersAmount: { [key: string]: number } = {};
   winners.forEach(({ winner }) => {
     if (!winner?.slug) return undefined;
