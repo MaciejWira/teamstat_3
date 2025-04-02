@@ -99,6 +99,7 @@ const sortOrder: SortProps[] = [
   "points",
   "goalsDifference",
   "pointsPerGame",
+  "goalsFor",
   "wins",
 ];
 
