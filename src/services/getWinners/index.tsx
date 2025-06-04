@@ -1,5 +1,5 @@
 import { getMonthsObj } from "@/services/getMonths";
-import getTable, { sortTable } from "@/services/getTable";
+import getTable, { getWinner, sortTable } from "@/services/getTable";
 
 export const getWinners = async () => {
   const allMonths = getMonthsObj(true);
@@ -21,13 +21,13 @@ export const getWinners = async () => {
           year: +year,
         },
       });
+      const sortedTable = sortTable({
+        table,
+        rounds,
+      });
 
       return {
-        winner: sortTable({
-          table,
-          rounds,
-          factor: "points",
-        })[0],
+        winner: getWinner(sortedTable),
         year,
       };
     })
@@ -36,10 +36,11 @@ export const getWinners = async () => {
   const monthWinners = await Promise.all(
     allMonths.map(async ({ month, year }) => {
       const { rounds, table } = await getTable({ date: { month, year } });
-      const winner = sortTable({
-        rounds,
+
+      const sortedTable = sortTable({
         table,
-      })[0];
+        rounds,
+      });
 
       const dateString = `${new Date(`${year}-${month}`).toLocaleString(
         "pl-PL",
@@ -49,7 +50,7 @@ export const getWinners = async () => {
       )} ${year}`;
 
       return {
-        winner,
+        winner: getWinner(sortedTable),
         dateString,
         month,
         year,
@@ -70,8 +71,10 @@ type YearWinners = Awaited<ReturnType<typeof getWinners>>[`yearWinners`];
 export const getWinnersAmount = (winners: MonthWinners | YearWinners) => {
   const winnersAmount: { [key: string]: number } = {};
   winners.forEach(({ winner }) => {
-    if (!winner?.slug) return undefined;
-    winnersAmount[winner?.slug] = (winnersAmount[winner?.slug] || 0) + 1;
+    winner.forEach((_winner) => {
+      if (!_winner?.slug) return undefined;
+      winnersAmount[_winner?.slug] = (winnersAmount[_winner?.slug] || 0) + 1;
+    });
   });
   return winnersAmount;
 };

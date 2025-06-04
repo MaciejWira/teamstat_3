@@ -130,4 +130,34 @@ export const sortTable = ({
   return sortedTable.filter((player) => player.games >= (rounds * 1) / 10);
 };
 
+// array returned, cause there might be more than one winner
+const statsToCompare: (keyof PlayerStats)[] = [
+  "games",
+  "wins",
+  "draws",
+  "losses",
+  "goalsFor",
+  "goalsAgainst",
+  "goalsDifference",
+  "points",
+  "pointsPerGame",
+];
+
+export const getWinner = (table: ReturnType<typeof sortTable>) => {
+  const winners = [table[0]];
+  for (let index = 0; index < table.length; index++) {
+    const player = table[index];
+    const sameStats = statsToCompare.every((stat) => {
+      if (!table[index + 1]) return false;
+      return player[stat] === table[index + 1][stat];
+    });
+    if (!sameStats) {
+      break;
+    } else {
+      winners.push(table[index + 1]);
+    }
+  }
+  return winners;
+};
+
 export default getTable;

@@ -22,35 +22,38 @@ const Winners = async () => {
         <Heading as="h2">Gracz roku</Heading>
         {yearWinners.map((_winner) => {
           const { winner, year } = _winner;
-          const winsAmount = winner?.slug ? yearWinnersAmount[winner.slug] : 0;
 
-          if (!winsAmount) return null;
+          return winner.map((w) => {
+            const winsAmount = w?.slug ? yearWinnersAmount[w.slug] : 0;
 
-          return (
-            <TextC
-              key={year}
-              theme={["x-large", "bold", "margin-bottom", "flex"]}
-            >
-              {year}
-              <Separator />
-              <LinkC
-                theme={["x-large", "bold", "white"]}
-                href={`/player/${winner?.slug}`}
+            if (!winsAmount) return null;
+
+            return (
+              <TextC
+                key={year}
+                theme={["x-large", "bold", "margin-bottom", "flex"]}
               >
-                {winner.title}
-              </LinkC>
-              {new Array(winsAmount).fill(0).map((el) => (
-                <Image
-                  key={star.src}
-                  src={star.src}
-                  width={18}
-                  height={18}
-                  alt=""
-                  className={style.BigStar}
-                />
-              ))}
-            </TextC>
-          );
+                {year}
+                <Separator />
+                <LinkC
+                  theme={["x-large", "bold", "white"]}
+                  href={`/player/${w?.slug}`}
+                >
+                  {w.title}
+                </LinkC>
+                {new Array(winsAmount).fill(0).map((el) => (
+                  <Image
+                    key={star.src}
+                    src={star.src}
+                    width={18}
+                    height={18}
+                    alt=""
+                    className={style.BigStar}
+                  />
+                ))}
+              </TextC>
+            );
+          });
         })}
       </section>
 
@@ -58,9 +61,6 @@ const Winners = async () => {
         <Heading as="h2">Gracz miesiąca</Heading>
         {monthWinners.map((_winner) => {
           const { winner, dateString, month, year } = _winner;
-          const winsAmount = winner?.slug ? monthWinnersAmount[winner.slug] : 0;
-
-          if (!winsAmount) return null;
 
           return (
             <TextC
@@ -69,22 +69,31 @@ const Winners = async () => {
             >
               {firstLetterUpperCase(dateString)}
               <Separator />
-              <LinkC
-                theme={["large", "white"]}
-                href={`/player/${winner?.slug}`}
-              >
-                {winner.title}
-              </LinkC>
-              {new Array(winsAmount).fill(0).map((el) => (
-                <Image
-                  key={star.src}
-                  src={star.src}
-                  width={13}
-                  height={13}
-                  alt=""
-                  className={style.Star}
-                />
-              ))}
+              {winner.map((w, index) => {
+                const winsAmount = w?.slug ? monthWinnersAmount[w.slug] : 0;
+
+                return (
+                  <>
+                    <LinkC
+                      theme={["large", "white"]}
+                      href={`/player/${w?.slug}`}
+                    >
+                      {w.title}
+                    </LinkC>
+                    {new Array(winsAmount).fill(0).map((el) => (
+                      <Image
+                        key={star.src}
+                        src={star.src}
+                        width={13}
+                        height={13}
+                        alt=""
+                        className={style.Star}
+                      />
+                    ))}
+                    {index < winner.length - 1 && <span>,&nbsp;</span>}
+                  </>
+                );
+              })}
             </TextC>
           );
         })}
